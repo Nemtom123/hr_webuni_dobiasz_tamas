@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hr application Dobiasz</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+</head>
+<body class="hatter">
+
+<h1 class="h1">HR APPLICATION</h1><br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+        </div>
+        <div class="col-md-4 offset-md-4">
+            <form th:object="${newadd}" th:action="@{/employees}" method="post">
+                <label>Id</label>
+                <input th:field="*{employeeId}" type="text" name="employeeId" class="form-control"/>
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <label>Name</label>
+                <input th:field="*{workName}" type="text" name="workName" class="form-control"/>
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <label>Job</label>
+                <input th:field="*{jobTitle}" type="text" name="jobTitle" class="form-control"/>
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <label>Salary</label>
+                <input th:field="*{salary}" type="text" name="salary" class="form-control"/>
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <label>Begin Date</label>
+                <input th:field="*{dateOfStartWork}" name="dateOfStartWork" class="form-control">
+                <div style="clear: both; display: block; height: 10px;"></div>
+                <input type="submit" class="btn btn-success" value="Save"/>
+            </form>
+        </div>
+        <div class="col-md-4 offset-md-4">
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

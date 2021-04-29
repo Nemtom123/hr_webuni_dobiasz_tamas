@@ -1,0 +1,106 @@
+body {
+    overflow-x: hidden;
+    background-color: #f0f0f0;
+    font-color: grey;
+}
+.h1 {
+       text-align: center;
+       color: gray;
+}
+
+.hatter {
+ background-color: #f0f0f0;
+}
+
+.button{
+    /*Change the width as much as you like, but make sure
+    margin-left and margin-right + width = 100%*/
+    width:50%;
+    margin-left:25%;
+    margin-right:25%;
+}
+.badge {
+background-color: orangered;
+    color: #000000;
+    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    padding-bottom: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
+    text-shadow: none;
+    min-width: 200px;
+    border-radius: 0px;
+    padding: 5px;
+}
+
+.label-danger, .badge-danger {
+    background-color: orangered;
+    color: #FFFFFF;
+}
+
+
+.jumbotron {
+ align: center;
+  height:100%;
+  width:100%;
+}
+.container {
+  width:1025px;
+}
+.jumbotron .container {
+  max-width: 100%;
+}
+
+.watb-button-tervezes {
+    font-family: "Helvetica", "Arial", sans-serif;
+    display: inline-block;
+    font-size: 1em;
+    padding: 1em 2em;
+    margin-top: 100px;
+    margin-bottom: 60px;
+    -webkit-appearance: none;
+    background-color: #ee9922;
+    color: red;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+    box-shadow: 0 2px 25px rgb(238, 153, 34);
+}
+
+.watb-font-color{
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: large;
+    color: #0f1f2a;
+}
+
+.watb-font-color p{
+    color: #0f1f2b;
+}
+
+.watb-font-color hr{
+    background-color: yellow;
+}
+.watb-font-color h4{
+    color: #0f1f2b;
+}
+
+.watb-font-color h2{
+    color: #0f1f2b;
+}
+
+.watb-font-color1{
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: large;
+    color: #0f1f2a;
+}
+
+.watb-font-color1 p{
+    color: #0f1f2b;
+}
+
+.watb-font-color1 hr{
+    background-color: orangered;
+}
