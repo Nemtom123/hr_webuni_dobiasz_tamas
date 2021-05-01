@@ -32,7 +32,7 @@ public class InitDbService {
     @Transactional
     public void initDb() {
 
-        Position developer = positionRepository.save(new Position("Head chef", Qualification.UNIVERSITY));
+        Position developer = positionRepository.save(new Position("Head Chef", Qualification.UNIVERSITY));
         Position tester = positionRepository.save(new Position("Chef", Qualification.HIGH_SCHOOL));
 
         Employee newEmployee1 = employeeRepository.save(new Employee(null, "John Malkovics ","Director", 200000, LocalDateTime.now()));
@@ -49,14 +49,14 @@ public class InitDbService {
         pd.setCompany(newCompany);
         pd.setMinSalary(250000);
         pd.setPosition(developer);
-        /*nem működik*/
+        /*----nem-működik----*/
         //positionDetailsByCompanyRepository.save(pd);
 
         PositionDetailsByCompany pd2 = new PositionDetailsByCompany();
         pd2.setCompany(newCompany);
         pd2.setMinSalary(200000);
         pd2.setPosition(tester);
-        /*nem működik*/
+        /*-----nem-működik-----*/
         //positionDetailsByCompanyRepository.save(pd2);
     }
 }
