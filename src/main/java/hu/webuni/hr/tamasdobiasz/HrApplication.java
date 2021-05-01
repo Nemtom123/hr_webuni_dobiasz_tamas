@@ -1,46 +1,55 @@
 package hu.webuni.hr.tamasdobiasz;
 
+import hu.webuni.hr.tamasdobiasz.config.HrConfigProperties;
 import hu.webuni.hr.tamasdobiasz.model.Employee;
+import hu.webuni.hr.tamasdobiasz.service.InitDbService;
 import hu.webuni.hr.tamasdobiasz.service.SalaryService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @SpringBootApplication
 public class HrApplication implements CommandLineRunner {
+
 	@Autowired
 	SalaryService salaryService;
 
-	Employee employee = new Employee();
+	@Autowired
+	HrConfigProperties config;
+
+	@Autowired
+	InitDbService initDbService;
+
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(HrApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		List<Employee> employees = new ArrayList<>();
-		employees.add(new Employee(1L, "John Doe", "Director",2250000, LocalDateTime.of(2010, 9, 20, 8, 10, 10)));
-		employees.add(new Employee(2L, "John Boe", "Fisherman",350000, LocalDateTime.of(2014, 9, 20, 8, 10, 10)));
-		employees.add(new Employee(3L, "John Dean","Testing",250000, LocalDateTime.of(2016, 9, 20, 8, 10, 10)));
-		employees.add(new Employee(4L, "Mariska Margittai","Application developer",450000, LocalDateTime.of(2017, 9, 20, 8, 10, 10)));
-		employees.add(new Employee(5L, "John Malkovic","Achtor",6250000, LocalDateTime.of(2018, 9, 20, 8, 10, 10)));
-		employees.add(new Employee(6L, "John Wick","Starring",4250000, LocalDateTime.of(2020, 9, 20, 8, 10, 10)));
-		employees.add(new Employee(7L, "John Wick1","Statistics",1250000, LocalDateTime.of(2009, 9, 20, 8, 10, 10)));
-		employees.add(new Employee(8L, "John Wick2","Statistics",350000, LocalDateTime.of(2011, 9, 20, 8, 10, 10)));
-		employees.add(new Employee(9L, "John Wick3","Statistics",550000, LocalDateTime.of(2013, 9, 20, 8, 10, 10)));
-		employees.add(new Employee(10L,"John Wick4","Statistics",350000, LocalDateTime.of(2019, 9, 20, 8, 10, 10)));
-		for (Employee names : employees) {
-			System.out.println(names.getEmployeeId() + "  " + "New Salery : " + salaryService.getNewSalary(names));
+		HrConfigProperties.Smart smartConfig = config.getSalary().getSmart();
+		for (Double limit :
+				smartConfig.getLimits().keySet()
+			/*Arrays.asList(smartConfig.getLimit1(), smartConfig.getLimit2(), smartConfig.getLimit3())*/) {
+
+			int origSalary = 100;
+			LocalDateTime limitDay = LocalDateTime.now().minusDays((long)(limit*365));
+			Employee e1 = new Employee(1L, "Volt De Mort","Dark Wizzard", origSalary, limitDay.plusDays(1));
+			Employee e2 = new Employee(2L, "Harry Potter","Wizzard", origSalary, limitDay.minusDays(1));
+
+			salaryService.setNewSalary(e1);
+			salaryService.setNewSalary(e2);
+
+			System.out.format("1 nappal a %.2f éves határ előtt az új fizetés %d%n", limit, e1.getSalary());
+			System.out.format("1 nappal a %.2f éves határ után az új fizetés %d%n", limit, e2.getSalary());
 		}
+		initDbService.initDb();
+
 	}
 
 }
+

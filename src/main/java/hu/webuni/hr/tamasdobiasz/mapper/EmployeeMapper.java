@@ -12,10 +12,9 @@ public interface EmployeeMapper {
 
     List<HrDto> employeesToDtos(List<Employee> employees);
 
-    @Mapping(target = "company", source = "company.companyName")
-    default HrDto employeeToDto(Employee employee) {
-        return null;
-    }
+    @Mapping(target = "companyName", source = "company.companyName")
+    @Mapping(target = "jobTitle", source = "position.name")
+    HrDto employeeToDto(Employee employee);
 
     Employee dtoToEmployee(HrDto employeeDto);
 

@@ -1,10 +1,7 @@
 package hu.webuni.hr.tamasdobiasz.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +17,8 @@ public class Company {
     @OneToMany(mappedBy = "company")
     private List<Employee> employees;
 
+    @ManyToOne
+    private CompanyType companyType;
     public Company() {
 
     }
@@ -85,6 +84,13 @@ public class Company {
             this.employees = new ArrayList<>();
         this.employees.add(employee);
         employee.setCompany(this);
+    }
+    public CompanyType getCompanyType() {
+        return companyType;
+    }
+
+    public void setCompanyType(CompanyType companyType) {
+        this.companyType = companyType;
     }
 
 }

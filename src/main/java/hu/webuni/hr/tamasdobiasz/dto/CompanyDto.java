@@ -33,9 +33,6 @@ public class CompanyDto {
         this.id = id;
     }
 
-    public void setId(long id) {
-    }
-
     public List<HrDto> getEmployee() {
         return employee;
     }

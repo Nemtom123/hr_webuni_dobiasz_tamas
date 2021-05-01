@@ -7,7 +7,7 @@ import hu.webuni.hr.tamasdobiasz.config.HrConfigProperties;
 import hu.webuni.hr.tamasdobiasz.model.Employee;
 
 @Service
-public class DefaultEmployeeService extends EmployeeService {
+public class DefaultEmployeeService extends AbstractEmployeeService {
 	@Autowired
 	HrConfigProperties config;
 

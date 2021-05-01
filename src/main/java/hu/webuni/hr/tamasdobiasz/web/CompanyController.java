@@ -6,8 +6,10 @@ import hu.webuni.hr.tamasdobiasz.dto.HrDto;
 import hu.webuni.hr.tamasdobiasz.dto.Views;
 import hu.webuni.hr.tamasdobiasz.mapper.CompanyMapper;
 import hu.webuni.hr.tamasdobiasz.mapper.EmployeeMapper;
+import hu.webuni.hr.tamasdobiasz.model.AverageSalaryByPosition;
 import hu.webuni.hr.tamasdobiasz.model.Company;
 import hu.webuni.hr.tamasdobiasz.model.Employee;
+import hu.webuni.hr.tamasdobiasz.repository.CompanyRepository;
 import hu.webuni.hr.tamasdobiasz.service.CompanyService;
 import hu.webuni.hr.tamasdobiasz.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/companies")
 public class CompanyController {
+
+    CompanyRepository companyRepository;
 
     @Autowired
     CompanyService companyService;
@@ -66,11 +70,14 @@ public class CompanyController {
         return ResponseEntity.ok(companyMapper.companyToDto(updatedCompany));
     }
 
+    /*------Delete-Company----------*/
     @DeleteMapping("/{id}")
     public void deleteCompany(@PathVariable long id) {
         companyService.delete(id);
     }
 
+
+    /*------Tovább-passzolás----------*/
     @PostMapping("/{id}/employees")
     public CompanyDto addNewEmployee(@PathVariable long id, @RequestBody HrDto employeeDto) {
         try {
@@ -82,8 +89,9 @@ public class CompanyController {
         }
     }
 
+    /*------Delete-Employee----------*/
     @DeleteMapping("/{id}/employees/{employeeId}")
-    public CompanyDto deleteEmployee(@PathVariable long id, @PathVariable long employeeId){
+    public CompanyDto deleteEmployee(@PathVariable long id, @PathVariable long employeeId) {
         try {
             return companyMapper.companyToDto(
                     companyService.deleteEmployee(id, employeeId)
@@ -93,6 +101,7 @@ public class CompanyController {
         }
     }
 
+    /*------Csere-Employee----------*/
     @PutMapping("/{id}/employees")
     public CompanyDto replaceEmployees(@PathVariable long id, @RequestBody List<HrDto> employees) {
         try {
@@ -104,6 +113,35 @@ public class CompanyController {
         }
 
     }
+
+    @GetMapping(params = "aboveSalary")
+    public List<CompanyDto> getCompaniesAboveASalary(@RequestParam int aboveSalary,
+                                                     @RequestParam(required = false) String full) {
+        List<Company> allCompanies = companyRepository.findByEmployeeWidthtHigherThan(aboveSalary);
+        if (full == null || full.equals("false")) {
+            return companyMapper.companySummariesToDtos(allCompanies);
+        } else
+            return companyMapper.companiesToDtos(allCompanies);
+    }
+
+    @GetMapping(params = "aboveEmployeeNumber")
+    public List<CompanyDto> getCompaniesAboveEmployeeNumber(@RequestParam int aboveEmployeeNumber,
+                                                            @RequestParam(required = false) String full) {
+        List<Company> filteredCompanies = companyRepository.findByEmployeeCountHigherThan(aboveEmployeeNumber);
+        if (full == null || full.equals("false")) {
+            return companyMapper.companySummariesToDtos(filteredCompanies);
+        } else
+            return companyMapper.companiesToDtos(filteredCompanies);
+    }
+
+    @GetMapping("/{id}/salaryStats")
+    public List<AverageSalaryByPosition> getSalaryStatsById(@PathVariable long id, @RequestParam(required = false) Boolean full) {
+        return companyRepository.findAverageSalariesByPosition(id);
+    }
+}
+
+
+
     /*
 
     private Map<Long, CompanyDto> companies = new HashMap<>();
@@ -148,27 +186,6 @@ public class CompanyController {
         }
     }
 
-    @PostMapping
-    public CompanyDto createCompany(@RequestBody CompanyDto companyDto){
-        companies.put(companyDto.getId(), companyDto);
-        return companyDto;
-    }
-
-
-    @PutMapping("/{id}")
-    public ResponseEntity<CompanyDto> modyfyCompany(@PathVariable long id, @RequestBody CompanyDto companyDto){
-        if (!companies.containsKey(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        companyDto.setId(id);
-        return ResponseEntity.ok(companyDto);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteCompany(@PathVariable Long id){
-        companies.remove(id);
-    }
-
     @PostMapping("/{id}/employees")
     public CompanyDto addNewEmployee(@PathVariable long id, @RequestBody HrDto hrDto){
         CompanyDto companyDto = finByIdOrThrow(id);
@@ -189,14 +206,6 @@ public class CompanyController {
         return companyDto;
     }
 
-    // Egyszerűsítés
-    public CompanyDto finByIdOrThrow(long id){
-        CompanyDto companyDto = companies.get(id);
-        if (companyDto == null)
-           throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        return companyDto;
-    }
-
 
     @PutMapping("/{id}/employees")
     public CompanyDto replaceEmployee(@PathVariable long id, @RequestBody List<HrDto> hrDto){
@@ -205,11 +214,6 @@ public class CompanyController {
         return companyDto;
     }
 
-
-    @DeleteMapping("/{companyRegistrationNumber}")
-    public void deleteCompany(@PathVariable long companyRegistrationNumber) {
-        companyService.delete(companyRegistrationNumber);
-    }
 
     @PutMapping("/{companyRegistrationNumber}")
     public ResponseEntity<CompanyDto> modifyCompany(@PathVariable long registrationNumber,
@@ -231,4 +235,4 @@ public class CompanyController {
     }
 */
 
-}
+

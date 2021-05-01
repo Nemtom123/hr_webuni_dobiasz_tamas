@@ -6,10 +6,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.time.temporal.Temporal;
+
 @Entity
 public class Employee {
 
 	public String dates;
+
+
 	@Id
 	@GeneratedValue
 	private Long employeeId;
@@ -20,6 +24,9 @@ public class Employee {
 
 	@ManyToOne
 	private Company company;
+
+	@ManyToOne
+	private Position position;
 
 	public Employee() {
 	}
@@ -90,5 +97,15 @@ public class Employee {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
+
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
 
 }

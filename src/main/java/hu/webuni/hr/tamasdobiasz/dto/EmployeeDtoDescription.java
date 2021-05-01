@@ -8,7 +8,6 @@ public class EmployeeDtoDescription {
     private Integer number;
     private Integer zip;
 
-
     public EmployeeDtoDescription(Long descriptionId) {
         this.descriptionId = descriptionId;
     }

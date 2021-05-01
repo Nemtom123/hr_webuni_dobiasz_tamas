@@ -1,19 +1,28 @@
 package hu.webuni.hr.tamasdobiasz.service;
 
-import hu.webuni.hr.tamasdobiasz.dto.HrDto;
 import hu.webuni.hr.tamasdobiasz.model.Employee;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-public abstract class EmployeeService {
+public interface EmployeeService {
+
+    public int getPayRaisePercent(Employee employee);
+
+    public Employee save(Employee employee);
+
+    public Employee update(Employee employee);
+
+    public List<Employee> findAll();
+
+    public Optional<Employee> findById(long id);
+
+    public void delete(long id);
+
+}
+       /*
+
     public abstract int getPayRaisePercent(Employee employee);
-        private Map<Long, Employee> employees = new HashMap<>();
-
+    private Map<Long, Employee> employees = new HashMap<>();
 
         {
             employees.put(1L, new Employee(1L, "John Doe", "Director", 2250000,   LocalDateTime.parse("2010-02-12T10:10:10")));
@@ -28,11 +37,13 @@ public abstract class EmployeeService {
             employees.put(10L,new Employee(10L, "John Wick4", "Statistics", 350000, LocalDateTime.parse("2021-02-12T10:10:10")));
         }
 
+    public abstract Employee update(Employee employee);
+
     public List<Employee> findAll() {
         return new ArrayList<Employee>(employees.values());
     }
 
-    public Employee findById(long id) {
+    public Optional<Employee> findById(long id) {
         return employees.get(id);
     }
 
@@ -50,9 +61,9 @@ public abstract class EmployeeService {
         employees.remove(id);
     }
 
+*/
 
 
 
-}
 
 

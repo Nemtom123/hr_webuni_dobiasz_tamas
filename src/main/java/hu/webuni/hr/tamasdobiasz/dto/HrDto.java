@@ -17,13 +17,10 @@ public class HrDto{
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateOfStartWork;
 
+    private String companyName;
 
     public HrDto() {
-        this.employeeId = employeeId;
-        this.workName = workName;
-        this.jobTitle = jobTitle;
-        this.salary = salary;
-        this.dateOfStartWork = dateOfStartWork;
+
     }
 
     public HrDto(Long employeeId, String workName,String jobTitle, int salary, LocalDateTime dateOfStartWork) {
@@ -82,5 +79,14 @@ public class HrDto{
         return "Employee [id=" + employeeId + ", workName=" + workName + ", title=" + jobTitle + ", salary=" + salary + ", dateOfStartWork="
                 + getDateOfStartWork() + "]";
     }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
 
 }
