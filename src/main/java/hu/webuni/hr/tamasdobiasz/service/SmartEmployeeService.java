@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hu.webuni.hr.tamasdobiasz.config.HrConfigProperties;
+import hu.webuni.hr.tamasdobiasz.config.HrConfigProperties.Smart;
 import hu.webuni.hr.tamasdobiasz.model.Employee;
 
 @Service
@@ -20,9 +21,9 @@ public class SmartEmployeeService extends AbstractEmployeeService {
 	@Override
 	public int getPayRaisePercent(Employee employee) {
 
-		double yearsWorked = ChronoUnit.DAYS.between(employee.getDateOfStartWork(), LocalDateTime.now()) / 365.0;
+		double yearsWorked = ChronoUnit.DAYS.between(employee.getEntryDate(), LocalDateTime.now()) / 365.0;
 
-		HrConfigProperties.Smart smartConfig = config.getSalary().getSmart();
+		Smart smartConfig = config.getSalary().getSmart();
 //		if(yearsWorked > smartConfig.getLimit3())
 //			return smartConfig.getPercent3();
 //

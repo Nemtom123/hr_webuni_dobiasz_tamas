@@ -11,10 +11,12 @@ import hu.webuni.hr.tamasdobiasz.repository.EmployeeRepository;
 import hu.webuni.hr.tamasdobiasz.repository.PositionDetailsByCompanyRepository;
 import hu.webuni.hr.tamasdobiasz.repository.PositionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+@Service
 public class InitDbService {
 
     @Autowired
@@ -35,11 +37,11 @@ public class InitDbService {
         Position developer = positionRepository.save(new Position("Head Chef", Qualification.UNIVERSITY));
         Position tester = positionRepository.save(new Position("Chef", Qualification.HIGH_SCHOOL));
 
-        Employee newEmployee1 = employeeRepository.save(new Employee(null, "John Malkovics ","Director", 200000, LocalDateTime.now()));
+        Employee newEmployee1 = employeeRepository.save(new Employee(null, "John Malkovics ", 200000, LocalDateTime.now()));
         newEmployee1.setPosition(developer);
 
 
-        Employee newEmployee2 = employeeRepository.save(new Employee(null, "Terminator T3000","Achtor", 200000, LocalDateTime.now()));
+        Employee newEmployee2 = employeeRepository.save(new Employee(null, "Terminator T3000", 200000, LocalDateTime.now()));
         newEmployee2.setPosition(tester);
         Company newCompany = companyRepository.save(new Company(null, 10L, "Fiktív Univerzum", "Budapest Király 12", null));
         newCompany.addEmployee(newEmployee2);
@@ -48,15 +50,14 @@ public class InitDbService {
         PositionDetailsByCompany pd = new PositionDetailsByCompany();
         pd.setCompany(newCompany);
         pd.setMinSalary(250000);
-        pd.setPosition(developer);
-        /*----nem-működik----*/
-        //positionDetailsByCompanyRepository.save(pd);
+        /*----működik----*/
+        positionDetailsByCompanyRepository.save(pd);
 
         PositionDetailsByCompany pd2 = new PositionDetailsByCompany();
         pd2.setCompany(newCompany);
         pd2.setMinSalary(200000);
         pd2.setPosition(tester);
-        /*-----nem-működik-----*/
-        //positionDetailsByCompanyRepository.save(pd2);
+        /*---működik-----*/
+        positionDetailsByCompanyRepository.save(pd2);
     }
 }

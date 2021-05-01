@@ -8,19 +8,17 @@ import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 
+
 @Entity
 public class Employee {
 
-	public String dates;
-
-
 	@Id
 	@GeneratedValue
-	private Long employeeId;
+	private Long id;
 	private String name;
-	private String jobTitle;
 	private int salary;
-	private LocalDateTime dateOfStartWork;
+
+	private LocalDateTime entryDate;
 
 	@ManyToOne
 	private Company company;
@@ -31,25 +29,20 @@ public class Employee {
 	public Employee() {
 	}
 
-
-	public Employee(Long employeeId, String name,String jobTitle, int salary, LocalDateTime dateOfStartWork) {
-		this.employeeId = employeeId;
+	public Employee(Long id, String name, int salary, LocalDateTime entryDate) {
+		super();
+		this.id = id;
 		this.name = name;
-		this.jobTitle = jobTitle;
 		this.salary = salary;
-		this.dateOfStartWork = dateOfStartWork;
+		this.entryDate = entryDate;
 	}
 
-	public Employee(String name){
-		this.name = name;
+	public Long getId() {
+		return id;
 	}
 
-	public Long getEmployeeId() {
-		return employeeId;
-	}
-
-	public void setEmployeeId(Long employeeId) {
-		this.employeeId = employeeId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -60,14 +53,6 @@ public class Employee {
 		this.name = name;
 	}
 
-	public String getJobTitle() {
-		return jobTitle;
-	}
-
-	public void setJobTitle(String jobTitle) {
-		this.jobTitle = jobTitle;
-	}
-
 	public int getSalary() {
 		return salary;
 	}
@@ -76,18 +61,12 @@ public class Employee {
 		this.salary = salary;
 	}
 
-	public LocalDateTime getDateOfStartWork() {
-		return dateOfStartWork;
+	public LocalDateTime getEntryDate() {
+		return entryDate;
 	}
 
-	public void setDateOfStartWork(LocalDateTime dateOfStartWork) {
-		this.dateOfStartWork = dateOfStartWork;
-	}
-
-	@Override
-	public String toString() {
-		return "Employee [id=" + employeeId + ", name=" + name + ", title=" + jobTitle + ", salary=" + salary + ", dateOfStartWork="
-				+ dateOfStartWork + "]";
+	public void setEntryDate(LocalDateTime entryDate) {
+		this.entryDate = entryDate;
 	}
 
 	public Company getCompany() {
@@ -98,7 +77,6 @@ public class Employee {
 		this.company = company;
 	}
 
-
 	public Position getPosition() {
 		return position;
 	}
@@ -107,5 +85,5 @@ public class Employee {
 		this.position = position;
 	}
 
-
 }
+

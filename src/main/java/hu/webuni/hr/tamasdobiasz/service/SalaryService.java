@@ -1,12 +1,10 @@
 package hu.webuni.hr.tamasdobiasz.service;
 
+import hu.webuni.hr.tamasdobiasz.model.Employee;
 import hu.webuni.hr.tamasdobiasz.repository.EmployeeRepository;
 import hu.webuni.hr.tamasdobiasz.repository.PositionDetailsByCompanyRepository;
 import hu.webuni.hr.tamasdobiasz.repository.PositionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import hu.webuni.hr.tamasdobiasz.model.Employee;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -33,6 +31,18 @@ public class SalaryService {
 		int newSalary = employee.getSalary() * (100 + employeeService.getPayRaisePercent(employee)) / 100;
 		employee.setSalary(newSalary);
 	}
+
+//	@Transactional
+//	public void raiseMinimalSalary(String positionName, int minSalary) {
+//		positionRepository.findByName(positionName)
+//		.forEach(p ->{
+//			p.setMinSalary(minSalary);
+//			p.getEmployees().forEach(e ->{
+//				if(e.getSalary() < minSalary)
+//					e.setSalary(minSalary);
+//			});
+//		});
+//	}
 
 	@Transactional
 	public void raiseMinimalSalary(String positionName, int minSalary, long companyId) {

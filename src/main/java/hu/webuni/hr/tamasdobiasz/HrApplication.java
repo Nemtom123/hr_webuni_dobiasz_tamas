@@ -1,6 +1,7 @@
 package hu.webuni.hr.tamasdobiasz;
 
 import hu.webuni.hr.tamasdobiasz.config.HrConfigProperties;
+import hu.webuni.hr.tamasdobiasz.config.HrConfigProperties.Smart;
 import hu.webuni.hr.tamasdobiasz.model.Employee;
 import hu.webuni.hr.tamasdobiasz.service.InitDbService;
 import hu.webuni.hr.tamasdobiasz.service.SalaryService;
@@ -8,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+import java.util.Arrays;
+import java.util.stream.Stream;
 import java.time.LocalDateTime;
 
 
@@ -24,22 +26,21 @@ public class HrApplication implements CommandLineRunner {
 	@Autowired
 	InitDbService initDbService;
 
-
 	public static void main(String[] args) {
 		SpringApplication.run(HrApplication.class, args);
 	}
 
+
 	@Override
 	public void run(String... args) throws Exception {
-		HrConfigProperties.Smart smartConfig = config.getSalary().getSmart();
+		Smart smartConfig = config.getSalary().getSmart();
 		for (Double limit :
 				smartConfig.getLimits().keySet()
 			/*Arrays.asList(smartConfig.getLimit1(), smartConfig.getLimit2(), smartConfig.getLimit3())*/) {
-
 			int origSalary = 100;
 			LocalDateTime limitDay = LocalDateTime.now().minusDays((long)(limit*365));
-			Employee e1 = new Employee(1L, "Volt De Mort","Dark Wizzard", origSalary, limitDay.plusDays(1));
-			Employee e2 = new Employee(2L, "Harry Potter","Wizzard", origSalary, limitDay.minusDays(1));
+			Employee e1 = new Employee(1L, "Volt De Mort", origSalary, limitDay.plusDays(1));
+			Employee e2 = new Employee(2L, "Harry Potter", origSalary, limitDay.minusDays(1));
 
 			salaryService.setNewSalary(e1);
 			salaryService.setNewSalary(e2);

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hr application Dobiasz</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+<h1 class="h1">HR APLICATION</h1><br>
+<button class="btn btn-warning" type="button" style="margin-left:85%"><a href="/add">Add Employee</a><i class="fa fa-arrow-center" aria-hidden="true"></i>
+</button>
+<br><br><br>
+<table id="todotable" class="table table-striped">
+    <tr>
+        <th>EmployeeId</th>
+        <th>Name</th>
+        <th>Job</th>
+        <th>Salary</th>
+        <th>Begin Date</th>
+        <th>Delete</th>
+    </tr>
+    <tr th:each="employee: ${employees}">
+        <td th:text="${employee.employeeId}"></td>
+        <td><a th:href="@{'/employees/' + ${employee.employeeId}}"><p th:text="${employee.workName}"></p></a></td>
+        <td th:text="${employee.jobTitle}"></td>
+        <td th:text="${employee.salary}"></td>
+        <td th:text="${employee.dateOfStartWork}"></td>
+        <td><button class="btn btn-danger">
+            <a class="link-inherit"th:href="@{'/deleteEmployee/' + ${employee.employeeId}}">
+                <span class="glyphicon glyphicon-trash"></span>
+            </a>
+        </button>
+    </tr>
+</table>
+</body>
+</html>
