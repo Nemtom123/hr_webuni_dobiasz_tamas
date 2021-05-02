@@ -22,36 +22,8 @@ public class SmartEmployeeService extends AbstractEmployeeService {
 	public int getPayRaisePercent(Employee employee) {
 
 		double yearsWorked = ChronoUnit.DAYS.between(employee.getEntryDate(), LocalDateTime.now()) / 365.0;
-
 		Smart smartConfig = config.getSalary().getSmart();
-//		if(yearsWorked > smartConfig.getLimit3())
-//			return smartConfig.getPercent3();
-//
-//		if(yearsWorked > smartConfig.getLimit2())
-//			return smartConfig.getPercent2();
-//
-//		if(yearsWorked > smartConfig.getLimit1())
-//			return smartConfig.getPercent1();
-
-//		Integer maxLimit = null;
-
-//		for(Entry<Double, Integer> limitEntry : smartConfig.getLimits().entrySet()) {
-//			if(yearsWorked > limitEntry.getKey())
-//				maxLimit = limitEntry.getValue();
-//			else
-//				break;
-//		}
-//		return maxLimit == null ? 0 : maxLimit;
-
 		TreeMap<Double, Integer> limits = smartConfig.getLimits();
-
-//		Optional<Double> optionalMax = limits.keySet()
-//		.stream()
-//		.filter(k -> yearsWorked >= k )
-//		.max(Double::compare);
-//
-//		return optionalMax.isEmpty() ? 0 : limits.get(optionalMax.get());
-
 		Map.Entry<Double, Integer> floorEntry = limits.floorEntry(yearsWorked);
 		return floorEntry == null ? 0 : floorEntry.getValue();
 	}

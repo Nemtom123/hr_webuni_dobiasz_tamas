@@ -10,7 +10,7 @@ spring:
     format:
       date-time: yyyy-MM-dd HH:mm:ss
   datasource:
-    url: jdbc:postgresql://localhost:5432/webuni_hr
+    url: jdbc:postgresql://localhost:5432/hr
     username: postgres
     password: tom1969
   jpa:

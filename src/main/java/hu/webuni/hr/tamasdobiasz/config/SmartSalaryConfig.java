@@ -9,7 +9,6 @@ import hu.webuni.hr.tamasdobiasz.service.SmartEmployeeService;
 
 @Configuration
 @Profile("smart")
-
 public class SmartSalaryConfig {
 	@Bean
 	public EmployeeService employeeService() {

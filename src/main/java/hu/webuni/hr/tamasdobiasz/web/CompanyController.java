@@ -1,4 +1,7 @@
 package hu.webuni.hr.tamasdobiasz.web;
+
+
+
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -40,6 +43,17 @@ public class CompanyController {
     @Autowired
     private CompanyRepository companyRepository;
 
+//	@GetMapping(params = "full=true")
+//	public List<CompanyDto> getCompanys() {
+//		return new ArrayList<>(companies.values());
+//	}
+//
+//	@GetMapping
+//	@JsonView(Views.BaseData.class)
+//	public List<CompanyDto> getCompanysWithBaseData(@RequestParam(required = false) Boolean full) {
+//		return getCompanys();
+//	}
+
     @GetMapping
     public List<CompanyDto> getCompanys(@RequestParam(required = false) Boolean full) {
         List<Company> companies = companyService.findAll();
@@ -47,6 +61,7 @@ public class CompanyController {
                 companyMapper.companySummariesToDtos(companies)
                 : companyMapper.companiesToDtos(companies);
     }
+
 
     @GetMapping("/{id}")
     public CompanyDto getById(@PathVariable long id, @RequestParam(required = false) Boolean full) {
@@ -114,7 +129,7 @@ public class CompanyController {
     @GetMapping(params = "aboveSalary")
     public List<CompanyDto> getCompaniesAboveASalary(@RequestParam int aboveSalary,
                                                      @RequestParam(required = false) String full) {
-        List<Company> allCompanies = companyRepository.findByEmployeeWidthtHigherThan(aboveSalary);
+        List<Company> allCompanies = companyRepository.findByEmployeeWithSalaryHigherThan(aboveSalary);
         if (full == null || full.equals("false")) {
             return companyMapper.companySummariesToDtos(allCompanies);
         } else
@@ -136,4 +151,3 @@ public class CompanyController {
         return companyRepository.findAverageSalariesByPosition(id);
     }
 }
-
