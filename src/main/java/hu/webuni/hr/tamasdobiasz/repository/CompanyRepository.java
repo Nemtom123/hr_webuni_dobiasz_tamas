@@ -22,6 +22,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 			+ "WHERE c.id=:companyId "
 			+ "GROUP BY e.position.name "
 			+ "ORDER BY avg(e.salary) DESC")
-	public List<AverageSalaryByPosition> findAverageSalariesByPosition(long companyId);
+	public List<AverageSalaryByPosition> findAverageSalaryByPosition(long companyId);
 
 }
