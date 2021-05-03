@@ -7,9 +7,14 @@ import hu.webuni.hr.tamasdobiasz.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import java.util.List;
 import java.util.Optional;
 
+@NamedEntityGraph(
+        name = "Company.full",
+        attributeNodes = @NamedAttributeNode("employees"))
 @Service
 public class CompanyService {
 

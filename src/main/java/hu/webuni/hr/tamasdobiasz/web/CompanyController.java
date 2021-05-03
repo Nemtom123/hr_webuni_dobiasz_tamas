@@ -57,9 +57,15 @@ public class CompanyController {
     @GetMapping
     public List<CompanyDto> getCompanys(@RequestParam(required = false) Boolean full) {
         List<Company> companies = companyService.findAll();
-        return full == null || full == false ?
-                companyMapper.companySummariesToDtos(companies)
-                : companyMapper.companiesToDtos(companies);
+        boolean notFull = (full == null || !full);
+        if (notFull) {
+            companies = companyService.findAll();
+            return companyMapper.companySummariesToDtos(companies);
+        }
+        else {
+            companies = companyRepository.findAllWhithEmployees( );
+            return companyMapper.companySummariesToDtos(companies);
+        }
     }
 
 
@@ -146,8 +152,8 @@ public class CompanyController {
             return companyMapper.companiesToDtos(filteredCompanies);
     }
 
-    @GetMapping("/{id}/salaryStats")
-    public List<AverageSalaryByPosition> getSalaryStatsById(@PathVariable long id, @RequestParam(required = false) Boolean full) {
-        return companyRepository.findAverageSalariesByPosition(id);
-    }
+//    @GetMapping("/{id}/salaryStats")
+//    public List<AverageSalaryByPosition> getSalaryStatsById(@PathVariable long id, @RequestParam(required = false) Boolean full) {
+//        return companyRepository.findAverageSalaryByPosition(id);
+//    }
 }
