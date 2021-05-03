@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -44,9 +45,9 @@ public class HrController {
     EmployeeRepository employeeRepository;
 
     @GetMapping
-    public List<HrDto> getEmployees(@RequestParam(required = false) Integer minSalary, Pageable pageable){
+    public List<HrDto> getEmployees(@RequestParam(required = false) Integer minSalary, Pageable pageable) {
         List<Employee> employees = null;
-        if(minSalary == null) {
+        if (minSalary == null) {
             employees = employeeService.findAll();
         } else {
             //Page<Employee> castolva
@@ -81,7 +82,7 @@ public class HrController {
     public ResponseEntity<HrDto> modifyEmployee(@PathVariable long id, @RequestBody @Valid HrDto employeeDto) {
         employeeDto.setEmployeeId(id);
         Employee updatedEmployee = employeeService.update(employeeMapper.dtoToEmployee(employeeDto));
-        if(updatedEmployee == null) {
+        if (updatedEmployee == null) {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok(employeeMapper.employeeToDto(updatedEmployee));

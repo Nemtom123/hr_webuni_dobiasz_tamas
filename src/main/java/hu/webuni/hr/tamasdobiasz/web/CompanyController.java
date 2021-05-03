@@ -63,7 +63,7 @@ public class CompanyController {
             return companyMapper.companySummariesToDtos(companies);
         }
         else {
-            companies = companyRepository.findAllWhithEmployees( );
+            companies = companyRepository.findAllWhithEmployees();
             return companyMapper.companySummariesToDtos(companies);
         }
     }

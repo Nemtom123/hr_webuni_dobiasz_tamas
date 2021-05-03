@@ -10,27 +10,27 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SalaryService {
 
-	private EmployeeService employeeService;
-	private PositionRepository positionRepository;
-	PositionDetailsByCompanyRepository positionDetailsByCompanyRepository;
+    private EmployeeService employeeService;
+    private PositionRepository positionRepository;
+    PositionDetailsByCompanyRepository positionDetailsByCompanyRepository;
 
-	EmployeeRepository employeeRepository;
+    EmployeeRepository employeeRepository;
 
 
-	public SalaryService(EmployeeService employeeService, PositionRepository positionRepository,
-						 PositionDetailsByCompanyRepository positionDetailsByCompanyRepository,
-						 EmployeeRepository employeeRepository) {
-		super();
-		this.employeeService = employeeService;
-		this.positionRepository = positionRepository;
-		this.positionDetailsByCompanyRepository = positionDetailsByCompanyRepository;
-		this.employeeRepository = employeeRepository;
-	}
+    public SalaryService(EmployeeService employeeService, PositionRepository positionRepository,
+                         PositionDetailsByCompanyRepository positionDetailsByCompanyRepository,
+                         EmployeeRepository employeeRepository) {
+        super();
+        this.employeeService = employeeService;
+        this.positionRepository = positionRepository;
+        this.positionDetailsByCompanyRepository = positionDetailsByCompanyRepository;
+        this.employeeRepository = employeeRepository;
+    }
 
-	public void setNewSalary(Employee employee) {
-		int newSalary = employee.getSalary() * (100 + employeeService.getPayRaisePercent(employee)) / 100;
-		employee.setSalary(newSalary);
-	}
+    public void setNewSalary(Employee employee) {
+        int newSalary = employee.getSalary() * (100 + employeeService.getPayRaisePercent(employee)) / 100;
+        employee.setSalary(newSalary);
+    }
 
 //	@Transactional
 //	public void raiseMinimalSalary(String positionName, int minSalary) {
@@ -44,19 +44,19 @@ public class SalaryService {
 //		});
 //	}
 
-	@Transactional
-	public void raiseMinimalSalary(String positionName, int minSalary, long companyId) {
-		positionDetailsByCompanyRepository.findByPositionNameAndCompanyId(positionName, companyId)
-				.forEach(pd ->{
-					pd.setMinSalary(minSalary);
+    @Transactional
+    public void raiseMinimalSalary(String positionName, int minSalary, long companyId) {
+        positionDetailsByCompanyRepository.findByPositionNameAndCompanyId(positionName, companyId)
+                .forEach(pd -> {
+                    pd.setMinSalary(minSalary);
 //			pd.getCompany().getEmployees().forEach(e ->{
 //				if(e.getPosition().getName().equals(positionName)
 //						&& e.getSalary() < minSalary)
 //					e.setSalary(minSalary);
 //			});
-				});
+                });
 
-		employeeRepository.updateSalaries(positionName, minSalary, companyId);
-	}
+        employeeRepository.updateSalaries(positionName, minSalary, companyId);
+    }
 
 }
