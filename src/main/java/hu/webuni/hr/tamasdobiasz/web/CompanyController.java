@@ -151,9 +151,4 @@ public class CompanyController {
         } else
             return companyMapper.companiesToDtos(filteredCompanies);
     }
-
-//    @GetMapping("/{id}/salaryStats")
-//    public List<AverageSalaryByPosition> getSalaryStatsById(@PathVariable long id, @RequestParam(required = false) Boolean full) {
-//        return companyRepository.findAverageSalaryByPosition(id);
-//    }
 }
