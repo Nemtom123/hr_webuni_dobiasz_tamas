@@ -1,14 +1,20 @@
 package hu.webuni.hr.tamasdobiasz.service;
 
+import hu.webuni.hr.tamasdobiasz.dto.HrDto;
 import hu.webuni.hr.tamasdobiasz.model.Company;
 import hu.webuni.hr.tamasdobiasz.model.Employee;
 import hu.webuni.hr.tamasdobiasz.repository.CompanyRepository;
 import hu.webuni.hr.tamasdobiasz.repository.EmployeeRepository;
+import hu.webuni.hr.tamasdobiasz.repository.HrDtoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,12 +29,15 @@ public class CompanyService {
     @Autowired
     EmployeeRepository employeeRepository;
 
+    @Autowired
+    HrDtoRepository hrDtoRepository;
+
     public Company save(Company company) {
         return companyRepository.save(company);
     }
 
     public Company update(Company company) {
-        if(!companyRepository.existsById(company.getId()))
+        if (!companyRepository.existsById(company.getId()))
             return null;
         return companyRepository.save(company);
     }
@@ -68,11 +77,55 @@ public class CompanyService {
         });
         company.getEmployees().clear();
 
-        for(Employee emp: employees) {
+        for (Employee emp : employees) {
             company.addEmployee(emp);
             employeeRepository.save(emp);
         }
         return company;
     }
+
+
+    public Employee createEmployee() {
+        Employee employee = new Employee();
+        employee.setId(employeeRepository.findById(1L).get().getId());
+
+        return null;
+    }
+
+    /*Dinamikus-keresés-Spring-Data-ban*/
+    public List<HrDto> findHrdtoExamle(HrDto example) {
+        long id = example.getEmployeeId();
+        String name = example.getWorkName();
+        String jobTitle = example.getJobTitle();
+        int salary = example.getSalary();
+        LocalDateTime entryDate = example.getDateOfStartWork();
+        String companyName = example.getCompanyName();
+
+        Specification<HrDto> spec = Specification.where(null);
+
+        if (id > 0) {
+            spec = spec.and(EmployeeSpecifications.hasId(id));
+        }
+
+        if (StringUtils.hasText(name))
+            spec = spec.and(EmployeeSpecifications.hasName(name));
+
+        if (StringUtils.hasText(jobTitle))
+            spec = spec.and(EmployeeSpecifications.hasJobTitle(jobTitle));
+
+        if (salary != 0)
+            spec = spec.and(EmployeeSpecifications.hasSalary(salary));
+
+        if (entryDate != null)
+            spec = spec.and(EmployeeSpecifications.hasEntryDate(entryDate));
+
+
+        if (StringUtils.hasText(companyName))
+            spec = spec.and(EmployeeSpecifications.hasCompanyName(companyName));
+
+        return hrDtoRepository.findAll(spec, Sort.by("id"));
+
+    }
+
 }
 

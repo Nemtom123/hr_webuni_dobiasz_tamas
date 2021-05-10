@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import hu.webuni.hr.tamasdobiasz.config.HrConfigProperties;
 import hu.webuni.hr.tamasdobiasz.model.Employee;
 
+import java.time.LocalDateTime;
+
 @Service
 public class DefaultEmployeeService extends AbstractEmployeeService {
 	@Autowired
@@ -14,6 +16,11 @@ public class DefaultEmployeeService extends AbstractEmployeeService {
 	@Override
 	public int getPayRaisePercent(Employee employee) {
 		return config.getSalary().getDef().getPercent();
+	}
+
+	@Override
+	public void createHrDto(long id, String name, String jobTittle, int salary, LocalDateTime date) {
+
 	}
 
 }

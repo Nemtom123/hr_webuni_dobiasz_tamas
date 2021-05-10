@@ -40,7 +40,6 @@ public class InitDbService {
         Employee newEmployee1 = employeeRepository.save(new Employee(null, "John Malkovics ", 200000, LocalDateTime.now()));
         newEmployee1.setPosition(developer);
 
-
         Employee newEmployee2 = employeeRepository.save(new Employee(null, "Terminator T3000", 200000, LocalDateTime.now()));
         newEmployee2.setPosition(tester);
         Company newCompany = companyRepository.save(new Company(null, 10L, "Fiktív Univerzum", "Budapest Király 12", null));
@@ -50,14 +49,12 @@ public class InitDbService {
         PositionDetailsByCompany pd = new PositionDetailsByCompany();
         pd.setCompany(newCompany);
         pd.setMinSalary(250000);
-        /*----működik----*/
         positionDetailsByCompanyRepository.save(pd);
 
         PositionDetailsByCompany pd2 = new PositionDetailsByCompany();
         pd2.setCompany(newCompany);
         pd2.setMinSalary(200000);
         pd2.setPosition(tester);
-        /*---működik-----*/
         positionDetailsByCompanyRepository.save(pd2);
     }
 }

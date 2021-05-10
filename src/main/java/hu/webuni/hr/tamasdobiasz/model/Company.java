@@ -5,6 +5,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@NamedEntityGraph(
+        name = "Company full",
+        attributeNodes = @NamedAttributeNode("employees")
+)
+
 @Entity
 public class Company {
     @Id

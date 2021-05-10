@@ -1,11 +1,9 @@
 package hu.webuni.hr.tamasdobiasz.repository;
 
-import hu.webuni.hr.tamasdobiasz.model.Company;
-import org.springframework.data.domain.Page;
 import hu.webuni.hr.tamasdobiasz.model.Employee;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;

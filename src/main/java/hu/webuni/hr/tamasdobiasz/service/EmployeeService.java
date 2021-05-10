@@ -1,6 +1,8 @@
 package hu.webuni.hr.tamasdobiasz.service;
 
 import hu.webuni.hr.tamasdobiasz.model.Employee;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +20,7 @@ public interface EmployeeService {
 
     public void delete(long id);
 
+    void createHrDto(long id, String name, String jobTittle, int salary, LocalDateTime date);
 }
        /*
 
