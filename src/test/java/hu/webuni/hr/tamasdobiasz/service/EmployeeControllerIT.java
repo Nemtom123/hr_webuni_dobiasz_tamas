@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EmployeeControllerIT {
 
-    private static final String BASE_URI = "/api/employees";
+    private static final String BASE_URI = "/api";
 
     @Autowired
     WebTestClient webTestClient;
@@ -29,7 +29,7 @@ public class EmployeeControllerIT {
 
         List<HrDto> employeesBefore = getAllEmployees();
 
-        HrDto newEmployee = new HrDto(0L, "ABC", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
+        HrDto newEmployee = new HrDto(0L, "Harry Potter", "Wizzard", 10, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
         saveEmployee(newEmployee).expectStatus().isOk();
 
         List<HrDto> employeesAfter = getAllEmployees();
@@ -55,13 +55,13 @@ public class EmployeeControllerIT {
     }
 
     private HrDto newInvalidEmployee() {
-        return new HrDto(0L, "", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
+        return new HrDto(0L, "", "Wizzard", 20, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
     }
 
     @Test
     void testThatEmployeeCanBeUpdatedWithValidFields() throws Exception {
 
-        HrDto newEmployee = new HrDto(0L, "ABC", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
+        HrDto newEmployee = new HrDto(0L, "Harry Potter", "wizzard", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
         HrDto savedEmployee = saveEmployee(newEmployee)
                 .expectStatus().isOk()
                 .expectBody(HrDto.class).returnResult().getResponseBody();
@@ -80,7 +80,7 @@ public class EmployeeControllerIT {
 
     @Test
     void testThatEmployeeCannotBeUpdatedWithInvalidFields() throws Exception {
-        HrDto newEmployee = new HrDto(0L, "ABC", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
+        HrDto newEmployee = new HrDto(0L, "Harry Potter", "Wizzard", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
         HrDto savedEmployee = saveEmployee(newEmployee)
                 .expectStatus().isOk()
                 .expectBody(HrDto.class).returnResult().getResponseBody();

@@ -21,7 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class CompanyControllerIT {
 
-    private static final Object BASE_URI = "/test";
+    private static final Object BASE_URI = "/";
+
+
     @Autowired
     CompanyService companyService;
 
@@ -44,34 +46,32 @@ public class CompanyControllerIT {
     @Autowired
     InitDbService initDbService;
 
-
-    @Test
-    void testThatCreatedAirportIsTested() throws Exception {
-        List<HrDto> airportsBefore = getAll();
-
-        HrDto newHrDto = new HrDto(1L, "Nyerő Jenő", "007", 1000, LocalDateTime.now());
-        createHrDto(newAirport);
-
-        List<AirportDto> airportsAfter = getAllAirports();
-
-        assertThat(airportsAfter.subList(0,airportsBefore.size())).usingFieldByFieldElementComparator().containsExactlyElementsOf(airportsBefore);
-        assertThat(airportsAfter.get(airportsAfter.size()-1)).usingRecursiveComparison().isEqualTo(newAirport);
-
+    private CompanyDto getFull(long registrationNumber) {
+        return getCopmanyFull(registrationNumber);
     }
 
+    private long createHrDto(long id, String name, String jobTittle, int salary, LocalDateTime date) {
+        employeeService.createHrDto(id,name,jobTittle,salary,date);
+        return id;
+    }
 
-
-    @Test
+    @Test /*duplázva-van*/
     void addEmployee() throws Exception {
-        HrDto newHrdto = new HrDto(1L, "Nyerő Jenő", "007", 1000, LocalDateTime.now());
         Long registrationId = companyRepository.findById(1L).get().getCompanyRegistrationNumber();
+        HrDto newHrdto = new HrDto(1L, "Nyerő Jenő", "007", 1000, LocalDateTime.now());
         addNewEmployee(newHrdto, registrationId);
-        CompanyDto companyAfter = getASpecificCopmanyFull(registrationId);
+        CompanyDto companyAfter = getCopmanyFull(registrationId);
         assertThat(companyAfter.getEmployee().size()).isEqualTo(1);
         assertThat(companyAfter.getEmployee().get(1).getEmployeeId()).isEqualTo(1);
     }
 
-    private void addNewEmployee(HrDto newEmployee, Long registrationId) {
+    @Test/*duplázva-van*/
+    void addNewHrEmployee() throws Exception{
+        HrDto newHrdto = new HrDto(1L, "Nyerő Jenő", "007", 1000, LocalDateTime.now());
+        Long addNewHrEmployee = employeeRepository.findByPositionName("wizzard").get(1).getId();
+        CompanyDto companyDto = new CompanyDto(1L,10121L,"Nyerő Kft", "Vizi Dudva u. 12",null);
+        assertThat(companyDto.getEmployee().size()).isEqualTo(1);
+        assertThat(companyDto.getEmployee().get(1).getEmployeeId()).isEqualTo(1);
     }
 
     @Test
@@ -81,9 +81,8 @@ public class CompanyControllerIT {
         addNewEmployee(swappableEmployee, registrationNumber);
         List<HrDto> hrDto = new ArrayList<>();
         hrDto.add(new HrDto(2L, "John Doe", "director", 2000, LocalDateTime.now()));
-        hrDto.add(new HrDto(3L, "Harry Potter", "wizzard", 20000, LocalDateTime.now()));
-        swapEmployees(hrDto, registrationNumber);
-        CompanyDto companyAfter = getASpecificCopmanyFull(registrationNumber);
+        swapHr(hrDto, registrationNumber);
+        CompanyDto companyAfter = getFull(registrationNumber);
         assertThat(companyAfter.getEmployee().size()).isEqualTo(2);
         assertThat(companyAfter.getEmployee().get(0).getJobTitle()).isEqualTo("director");
         assertThat(companyAfter.getEmployee().get(1).getJobTitle()).isEqualTo("wizzard");
@@ -95,34 +94,26 @@ public class CompanyControllerIT {
         List<HrDto> hrDto = new ArrayList<>();
         hrDto.add(new HrDto(2L, "John Doe", "director", 2000, LocalDateTime.now()));
         hrDto.add(new HrDto(3L, "Harry Potter", "wizzard", 20000, LocalDateTime.now()));
-        swapEmployees(hrDto, registrationNumber);
+        swapHr(hrDto, registrationNumber);
         long id = employeeRepository.findByNameStartingWithIgnoreCase("Harry Potter").get(0).getId();
         deleteEmployee(registrationNumber,id);
-        CompanyDto companyAfter = getASpecificCopmanyFull(registrationNumber);
+        CompanyDto companyAfter = getFull(registrationNumber);
         assertThat(companyAfter.getEmployee().size()).isEqualTo(1);
         assertThat(companyAfter.getEmployee().get(0).getJobTitle()).isEqualTo("wizzard");
     }
 
     @Test
-    void testFindHrdtosExanple(){
+    void testFindHrdtos(){
       long hrEmployee1 = createHrDto(0L, "John Doe", "director", 5000, LocalDateTime.now());
       long hrEmployee2 = createHrDto(1L, "John Emili", "painter", 1000, LocalDateTime.now());
-      long hrEmployee3 = createHrDto(5L, "John Wick", "developer", 2500, LocalDateTime.now());
-      long hrEmployee4 = createHrDto(6L, "John Joe", "actor", 3800, LocalDateTime.now());
-      createHrDto(8L, "John Malkovics", "actor", 6800, LocalDateTime.now());
-      HrDto example = new HrDto();
-      example.setEmployeeId(1L);
-      example.setSalary(3500);
-      example.setJobTitle("Nyerő Jenő");
-      example.setDateOfStartWork(LocalDateTime.now());
-      example.setCompanyName("Nyerő Kft");
-      List<HrDto> foundHrDto = this.companyService.findHrdtoExamle(example);
+      HrDto hrDto = new HrDto();
+      hrDto.setEmployeeId(1L);
+      hrDto.setSalary(3500);
+      hrDto.setJobTitle("Nyerő Jenő");
+      hrDto.setDateOfStartWork(LocalDateTime.now());
+      hrDto.setCompanyName("Nyerő Kft");
+      List<HrDto> foundHrDto = this.companyService.findHrdtoExamle(hrDto);
       assertThat(foundHrDto.stream().map(hu.webuni.hr.tamasdobiasz.dto.HrDto::getEmployeeId).collect(Collectors.toList())).containsExactly(hrEmployee1, hrEmployee2);
-    }
-
-    private long createHrDto(long id, String name, String jobTittle, int salary, LocalDateTime date) {
-        employeeService.createHrDto(id,name,jobTittle,salary,date);
-        return id;
     }
 
     @BeforeEach
@@ -132,6 +123,10 @@ public class CompanyControllerIT {
     }
 
     private void initDB() {
+        extracted();
+    }
+
+    private void extracted() {
         createCompany(new CompanyDto(1L, 121234L, "Nyerő-Jenő KFT", "Wien Spring Strasse 13", null));
     }
 
@@ -153,17 +148,18 @@ public class CompanyControllerIT {
 
 
 
-    private void addEmployee(HrDto newHrDto, long registrationNumber) {
+    private void addNewEmployee(HrDto newEmployee, Long registrationId) {
         webTestClient
                 .post()
-                .uri(BASE_URI + "/companies/" + registrationNumber + "/employee")
-                .bodyValue(newHrDto)
+                .uri(BASE_URI + "/companies/" + registrationId + "/employee")
+                .bodyValue(newEmployee)
                 .exchange()
                 .expectStatus()
                 .isOk();
     }
+    
 
-    private void swapEmployees(List<HrDto> hrDto, long registrationNumber) {
+    private void swapHr(List<HrDto> hrDto, long registrationNumber) {
         webTestClient
                 .put()
                 .uri(BASE_URI + "/companies/" + registrationNumber + "/employee")
@@ -182,10 +178,10 @@ public class CompanyControllerIT {
                 .isOk();
     }
 
-    private CompanyDto getASpecificCopmanyFull(long registrationNumber) {
+    private CompanyDto getCopmanyFull(long registrationNumber) {
         return webTestClient
                 .get()
-                .uri(BASE_URI + "/companies/" + registrationNumber + "/?full=true")
+                .uri(BASE_URI + "/companies/" + registrationNumber + "/full=true?")
                 .exchange()
                 .expectStatus()
                 .isOk()

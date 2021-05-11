@@ -44,12 +44,9 @@ public class Position {
     public void setQualification(Qualification qualification) {
         this.qualification = qualification;
     }
-
-
     public List<Employee> getEmployees() {
         return employees;
     }
-
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
     }
