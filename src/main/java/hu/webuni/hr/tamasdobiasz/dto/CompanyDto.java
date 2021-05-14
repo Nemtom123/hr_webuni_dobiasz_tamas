@@ -24,7 +24,6 @@ public class CompanyDto {
         this.employee = employee;
     }
 
-
     public Long getId() {
         return id;
     }

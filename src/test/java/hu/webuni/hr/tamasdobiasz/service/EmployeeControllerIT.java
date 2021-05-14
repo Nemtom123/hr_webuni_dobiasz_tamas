@@ -1,11 +1,12 @@
 package hu.webuni.hr.tamasdobiasz.service;
 
+
 import hu.webuni.hr.tamasdobiasz.dto.HrDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -22,89 +23,114 @@ public class EmployeeControllerIT {
     @Autowired
     WebTestClient webTestClient;
 
-    @Autowired
-    HrDto hrDto;
 
     @Test
-    void testThatCreatedEmployeeIsListed() throws Exception {
-        List<HrDto> employeesBefore = getAllEmployees();
-        HrDto newEmployee = new HrDto(1L, "John Doe", "wizzard", 500_000, LocalDateTime.of(2021,10,10,10,10));
-        createEmployee(newEmployee);
-        List<HrDto> employeesAfter = getAllEmployees();
-        assertThat(employeesAfter.subList(0, employeesBefore.size())).usingFieldByFieldElementComparator().containsExactlyElementsOf(employeesBefore);
-        assertThat(employeesAfter.get(employeesAfter.size() - 1)).usingRecursiveComparison().isEqualTo(newEmployee);
-    }
+    void testThatNewValidEmployeeCanBeSaved() throws Exception {
 
-    @Test
-    void testThatInvalidSalaryCreatedEmployeeIsNotListed() throws Exception {
         List<HrDto> employeesBefore = getAllEmployees();
-        HrDto newEmployee = new HrDto(1L, "John Doe", "wizzard", 500_000, LocalDateTime.of(2021,10,10,10,10));
-        createEmployee(newEmployee, HttpStatus.BAD_REQUEST);
+
+        HrDto newEmployee = new HrDto(0L, "ABC", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
+        saveEmployee(newEmployee).expectStatus().isOk();
 
         List<HrDto> employeesAfter = getAllEmployees();
 
-        assertThat(employeesAfter).usingFieldByFieldElementComparator().containsExactlyElementsOf(employeesBefore);
+        assertThat(employeesAfter.size()).isEqualTo(employeesBefore.size() + 1);
+
+        assertThat(employeesAfter.get(employeesAfter.size()-1))
+                .usingRecursiveComparison()
+                .ignoringFields("id")
+                .isEqualTo(newEmployee);
     }
 
     @Test
-    void testThatModifiedEmployeeIsListed() throws Exception {
-        HrDto newEmployee = new HrDto(1L, "John Doe", "wizzard", 500_000, LocalDateTime.of(2021,10,10,10,10));
-        createEmployee(hrDto);
-        HrDto modifiedEmployee = new HrDto(1L, "John Doe", "wizzard", 500_000, LocalDateTime.of(2021,10,10,10,10));
-        modifyEmployee(modifiedEmployee);
-        HrDto employeeAfterModification = getEmployee(modifiedEmployee.getEmployeeId());
-        assertThat(employeeAfterModification).usingRecursiveComparison().isEqualTo(modifiedEmployee);
+    void testThatNewInvalidEmployeeCannotBeSaved() throws Exception {
+        List<HrDto> employeesBefore = getAllEmployees();
+
+        HrDto newEmployee = newInvalidEmployee();
+        saveEmployee(newEmployee).expectStatus().isBadRequest();
+
+        List<HrDto> employeesAfter = getAllEmployees();
+
+        assertThat(employeesAfter).hasSameSizeAs(employeesBefore);
+    }
+
+    private HrDto newInvalidEmployee() {
+        return new HrDto(0L, "", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
     }
 
     @Test
-    void testThatInvalidSalaryModifiedEmployeeIsNotListed() throws Exception {
-        HrDto originalEmployee = new HrDto(1L, "John Doe", "wizzard", 500_000, LocalDateTime.of(2021,10,10,10,10));
-        createEmployee(originalEmployee);
-        HrDto modifiedEmployee = new HrDto(1L, "John Doe", "wizzard", 500_000, LocalDateTime.of(2021,10,10,10,10));
-        modifyEmployee(modifiedEmployee, HttpStatus.BAD_REQUEST);
-        HrDto employeeAfterModification = getEmployee(modifiedEmployee.getEmployeeId());
-        assertThat(employeeAfterModification).usingRecursiveComparison().isEqualTo(originalEmployee);
+    void testThatEmployeeCanBeUpdatedWithValidFields() throws Exception {
+
+        HrDto newEmployee = new HrDto(0L, "ABC", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
+        HrDto savedEmployee = saveEmployee(newEmployee)
+                .expectStatus().isOk()
+                .expectBody(HrDto.class).returnResult().getResponseBody();
+
+        List<HrDto> employeesBefore = getAllEmployees();
+        savedEmployee.setWorkName("modified");
+        modifyEmployee(savedEmployee).expectStatus().isOk();
+
+        List<HrDto> employeesAfter = getAllEmployees();
+
+        assertThat(employeesAfter).hasSameSizeAs(employeesBefore);
+        assertThat(employeesAfter.get(employeesAfter.size()-1))
+                .usingRecursiveComparison()
+                .isEqualTo(savedEmployee);
     }
 
-    private void createEmployee(HrDto newEmployee) {
-        createEmployee(newEmployee, HttpStatus.OK);
+    @Test
+    void testThatEmployeeCannotBeUpdatedWithInvalidFields() throws Exception {
+        HrDto newEmployee = new HrDto(0L, "ABC", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
+        HrDto savedEmployee = saveEmployee(newEmployee)
+                .expectStatus().isOk()
+                .expectBody(HrDto.class).returnResult().getResponseBody();
+
+        List<HrDto> employeesBefore = getAllEmployees();
+        HrDto invalidEmployee = newInvalidEmployee();
+        invalidEmployee.setEmployeeId(savedEmployee.getEmployeeId());
+        modifyEmployee(invalidEmployee).expectStatus().isBadRequest();
+
+        List<HrDto> employeesAfter = getAllEmployees();
+
+        assertThat(employeesAfter).hasSameSizeAs(employeesBefore);
+        assertThat(employeesAfter.get(employeesAfter.size()-1))
+                .usingRecursiveComparison()
+                .isEqualTo(savedEmployee);
     }
 
-    private void createEmployee(HrDto newEmployee, HttpStatus status) {
-        webTestClient
-                .post()
-                .uri(BASE_URI)
-                .bodyValue(newEmployee)
-                .exchange()
-                .expectStatus()
-                .isEqualTo(status);
+    private ResponseSpec modifyEmployee(HrDto employee) {
+        String path = BASE_URI + "/" + employee.getEmployeeId();
+        return
+                webTestClient
+                        .put()
+                        .uri(path)
+                        .bodyValue(employee)
+                        .exchange();
     }
 
-    private void modifyEmployee(HrDto modifiedEmployee) {
-        modifyEmployee(modifiedEmployee, HttpStatus.OK);
-    }
-
-    private void modifyEmployee(HrDto modifiedEmployee, HttpStatus status) {
-        webTestClient
-                .put()
-                .uri(BASE_URI + "/" + modifiedEmployee.getEmployeeId())
-                .bodyValue(modifiedEmployee)
-                .exchange()
-                .expectStatus()
-                .isEqualTo(status);
+    private ResponseSpec saveEmployee(HrDto newEmployee) {
+        return
+                webTestClient
+                        .post()
+                        .uri(BASE_URI)
+                        .bodyValue(newEmployee)
+                        .exchange();
     }
 
     private List<HrDto> getAllEmployees() {
-        List<HrDto> responseList = webTestClient.get().uri(BASE_URI).exchange().expectStatus().isOk()
-                .expectBodyList(HrDto.class).returnResult().getResponseBody();
-        Collections.sort(responseList, (e1, e2) -> Long.compare(e1.getEmployeeId(), e2.getEmployeeId()));
+        List<HrDto> responseList =
+                webTestClient
+                        .get()
+                        .uri(BASE_URI)
+                        .exchange()
+                        .expectStatus()
+                        .isOk()
+                        .expectBodyList(HrDto.class)
+                        .returnResult()
+                        .getResponseBody();
+        Collections.sort(responseList, (a1, a2) -> Long.compare(a1.getEmployeeId(), a2.getEmployeeId()));
         return responseList;
     }
 
-    private HrDto getEmployee(long id) {
-        HrDto employee = webTestClient.get().uri(BASE_URI + "/" + id).exchange().expectStatus().isOk()
-                .expectBody(HrDto.class).returnResult().getResponseBody();
-        return employee;
-    }
-
 }
+
