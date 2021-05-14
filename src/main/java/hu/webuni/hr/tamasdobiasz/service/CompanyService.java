@@ -92,7 +92,8 @@ public class CompanyService {
         return null;
     }
 
-    /*Dinamikus-keresés-Spring-Data-ban*/
+
+    /*Dinamikus-keresés-Spring-Data-ban */
     public List<HrDto> findHrdtoExamle(HrDto example) {
         long id = example.getEmployeeId();
         String name = example.getWorkName();
@@ -126,6 +127,8 @@ public class CompanyService {
         return hrDtoRepository.findAll(spec, Sort.by("id"));
 
     }
+
+
 
 }
 

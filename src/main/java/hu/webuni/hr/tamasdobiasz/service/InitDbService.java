@@ -1,20 +1,16 @@
 package hu.webuni.hr.tamasdobiasz.service;
 
 
-import hu.webuni.hr.tamasdobiasz.model.Company;
-import hu.webuni.hr.tamasdobiasz.model.Employee;
-import hu.webuni.hr.tamasdobiasz.model.Position;
-import hu.webuni.hr.tamasdobiasz.model.PositionDetailsByCompany;
-import hu.webuni.hr.tamasdobiasz.model.Qualification;
-import hu.webuni.hr.tamasdobiasz.repository.CompanyRepository;
-import hu.webuni.hr.tamasdobiasz.repository.EmployeeRepository;
-import hu.webuni.hr.tamasdobiasz.repository.PositionDetailsByCompanyRepository;
-import hu.webuni.hr.tamasdobiasz.repository.PositionRepository;
+import hu.webuni.hr.tamasdobiasz.model.*;
+import hu.webuni.hr.tamasdobiasz.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+
 
 @Service
 public class InitDbService {
@@ -31,8 +27,25 @@ public class InitDbService {
     @Autowired
     PositionDetailsByCompanyRepository positionDetailsByCompanyRepository;
 
+
+    UserRepository userRepository;
+    PasswordEncoder passwordEncoder;
+
+    public InitDbService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        super();
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @Transactional
-    public void initDb() {
+    public void createUserIfNeeded() {
+        if (!userRepository.existsById("admin")) {
+            userRepository.save(new EmployeeUser("admin", passwordEncoder.encode("pass"), Set.of("admin", "user")));
+        }
+        if (!userRepository.existsById("admin")) {
+            userRepository.save(new EmployeeUser("user", passwordEncoder.encode("pass"), Set.of("user")));
+        }
+
 
         Position developer = positionRepository.save(new Position("Head Chef", Qualification.UNIVERSITY));
         Position tester = positionRepository.save(new Position("Chef", Qualification.HIGH_SCHOOL));
@@ -56,5 +69,6 @@ public class InitDbService {
         pd2.setMinSalary(200000);
         pd2.setPosition(tester);
         positionDetailsByCompanyRepository.save(pd2);
+
     }
 }
