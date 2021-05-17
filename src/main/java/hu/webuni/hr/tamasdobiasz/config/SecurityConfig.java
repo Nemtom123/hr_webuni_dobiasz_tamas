@@ -26,13 +26,13 @@ import hu.webuni.hr.tamasdobiasz.security.JwtAuthFilter;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	UserDetailsService userDetailsService;
-	
+
 	@Autowired
 	JwtAuthFilter jwtAuthFilter;
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -53,15 +53,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 //			.httpBasic()
 //			.and()
-			.csrf().disable()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-			.authorizeRequests()
-			.antMatchers("/api/login/**").permitAll()
-			.antMatchers(HttpMethod.POST, "/api/airports/**").hasAuthority("admin")
-			.antMatchers(HttpMethod.PUT, "/api/airports/**").hasAnyAuthority("user", "admin")
-			.anyRequest().authenticated();
-		
+				.csrf().disable()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
+				.authorizeRequests()
+				.antMatchers("/api/login/**").permitAll()
+				.antMatchers(HttpMethod.POST, "/api/airports/**").hasAuthority("admin")
+				.antMatchers(HttpMethod.PUT, "/api/airports/**").hasAnyAuthority("user", "admin")
+				.anyRequest().authenticated();
+
 		http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-	
-	
-	
+
+
+
 }
