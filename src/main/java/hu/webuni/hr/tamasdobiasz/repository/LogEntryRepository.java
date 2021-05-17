@@ -6,7 +6,4 @@ import hu.webuni.hr.tamasdobiasz.model.LogEntry;
 
 public interface LogEntryRepository extends JpaRepository<LogEntry, Long>{
 
-    void save(String description, String name);
-
-
 }
