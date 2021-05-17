@@ -1,9 +1,12 @@
 package hu.webuni.hr.tamasdobiasz.service;
 
-import hu.webuni.hr.tamasdobiasz.dto.CompanyDto;
-import hu.webuni.hr.tamasdobiasz.dto.HrDto;
-import hu.webuni.hr.tamasdobiasz.repository.CompanyRepository;
-import hu.webuni.hr.tamasdobiasz.repository.EmployeeRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,19 +14,18 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import hu.webuni.hr.tamasdobiasz.dto.CompanyDto;
+import hu.webuni.hr.tamasdobiasz.dto.HrDto;
+import hu.webuni.hr.tamasdobiasz.model.Employee;
+import hu.webuni.hr.tamasdobiasz.repository.CompanyRepository;
+import hu.webuni.hr.tamasdobiasz.repository.EmployeeRepository;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
 public class CompanyControllerIT {
 
-    private static final Object BASE_URI = "/";
+    private static final Object BASE_URI = "/api";
 
     @Autowired
     CompanyService companyService;
@@ -33,9 +35,6 @@ public class CompanyControllerIT {
 
     @Autowired
     EmployeeService employeeService;
-
-    @Autowired
-    HrDto hrDto;
 
     @Autowired
     WebTestClient webTestClient;
@@ -112,8 +111,11 @@ public class CompanyControllerIT {
       hrDto.setJobTitle("Nyerő Jenő");
       hrDto.setDateOfStartWork(LocalDateTime.now());
       hrDto.setCompanyName("Nyerő Kft");
-      List<HrDto> foundHrDto = this.companyService.findHrdtoExamle(hrDto);
-      assertThat(foundHrDto.stream().map(hu.webuni.hr.tamasdobiasz.dto.HrDto::getEmployeeId).collect(Collectors.toList())).containsExactly(hrEmployee1, hrEmployee2);
+      List<Employee> foundHrDto = this.companyService.findHrdtoExamle(hrDto);
+      assertThat(foundHrDto.stream()
+    		  .map(Employee::getId)
+    		  .collect(Collectors.toList()))
+      .containsExactly(hrEmployee1, hrEmployee2);
     }
 
     @BeforeEach
