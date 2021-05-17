@@ -75,7 +75,7 @@ public class CompanyControllerIT {
 
     @Test
     void changeAllEmployee() throws Exception {
-        long registrationNumber = companyRepository.findWorkByName("Nyerő Jenő").get().getCompanyRegistrationNumber();
+        long registrationNumber = companyRepository.findByCompanyName("Nyerő-Jenő KFT").get().getCompanyRegistrationNumber();
         HrDto swappableEmployee = new HrDto(1L, "Nyerő Jenő", "Wizzard", 2000, LocalDateTime.now());
         addNewEmployee(swappableEmployee, registrationNumber);
         List<HrDto> hrDto = new ArrayList<>();
