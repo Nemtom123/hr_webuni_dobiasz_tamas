@@ -47,28 +47,29 @@ public class InitDbService {
         }
 
 
-        Position developer = positionRepository.save(new Position("Head Chef", Qualification.UNIVERSITY));
-        Position tester = positionRepository.save(new Position("Chef", Qualification.HIGH_SCHOOL));
-
-        Employee newEmployee1 = employeeRepository.save(new Employee(null, "John Malkovics ", 200000, LocalDateTime.now()));
-        newEmployee1.setPosition(developer);
-
-        Employee newEmployee2 = employeeRepository.save(new Employee(null, "Terminator T3000", 200000, LocalDateTime.now()));
-        newEmployee2.setPosition(tester);
-        Company newCompany = companyRepository.save(new Company(null, 10L, "Fiktív Univerzum", "Budapest Király 12", null));
-        newCompany.addEmployee(newEmployee2);
-        newCompany.addEmployee(newEmployee1);
-
-        PositionDetailsByCompany pd = new PositionDetailsByCompany();
-        pd.setCompany(newCompany);
-        pd.setMinSalary(250000);
-        positionDetailsByCompanyRepository.save(pd);
-
-        PositionDetailsByCompany pd2 = new PositionDetailsByCompany();
-        pd2.setCompany(newCompany);
-        pd2.setMinSalary(200000);
-        pd2.setPosition(tester);
-        positionDetailsByCompanyRepository.save(pd2);
+//        Position developer = positionRepository.save(new Position("Head Chef", Qualification.UNIVERSITY));
+//        Position tester = positionRepository.save(new Position("Chef", Qualification.HIGH_SCHOOL));
+//
+//        Employee newEmployee1 = employeeRepository.save(new Employee(null, "John Malkovics ", 200000, LocalDateTime.now()));
+//        newEmployee1.setPosition(developer);
+//
+//        Employee newEmployee2 = employeeRepository.save(new Employee(null, "Terminator T3000", 200000, LocalDateTime.now()));
+//        newEmployee2.setPosition(tester);
+//        Company newCompany = companyRepository.save(new Company(null, 10L, "Fiktív Univerzum", "Budapest Király 12", null));
+//        newCompany.addEmployee(newEmployee2);
+//        newCompany.addEmployee(newEmployee1);
+//
+//        PositionDetailsByCompany pd = new PositionDetailsByCompany();
+//        pd.setCompany(newCompany);
+//        pd.setMinSalary(250000);
+//        positionDetailsByCompanyRepository.save(pd);
+//
+//        PositionDetailsByCompany pd2 = new PositionDetailsByCompany();
+//        pd2.setCompany(newCompany);
+//        pd2.setMinSalary(200000);
+//        pd2.setPosition(tester);
+//        positionDetailsByCompanyRepository.save(pd2);
 
     }
+
 }

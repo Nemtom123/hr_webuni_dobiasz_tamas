@@ -62,7 +62,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 	List<Company> findWhereEmployeeSalaryIsGreaterThan(int salary);
 
 	@EntityGraph("companyWithEmployeesAndEmployeePositions")
-//	@Query("SELECT c FROM Company c INNER JOIN c.employees e GROUP BY c.registrationNumber HAVING COUNT(e) > :employeeNumber")
 	@Query("SELECT c FROM Company c WHERE SIZE(c.employees) > :employeeNumber")
 	List<Company> findWhereEmployeeNumberIsAbove(int employeeNumber);
 
