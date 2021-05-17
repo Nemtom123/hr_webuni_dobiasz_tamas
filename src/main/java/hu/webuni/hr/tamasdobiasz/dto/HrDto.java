@@ -23,7 +23,13 @@ public class HrDto{
 
     }
 
-    public HrDto(Long employeeId, String workName,String jobTitle, int salary, LocalDateTime dateOfStartWork) {
+    public HrDto(@NotEmpty String jobTitle, double salary) {
+		super();
+		this.jobTitle = jobTitle;
+		this.salary = (int)salary;
+	}
+
+	public HrDto(Long employeeId, String workName,String jobTitle, int salary, LocalDateTime dateOfStartWork) {
         this.employeeId = employeeId;
         this.workName = workName;
         this.jobTitle = jobTitle;

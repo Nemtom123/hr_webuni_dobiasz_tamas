@@ -25,10 +25,8 @@ public class CompanyControllerIT {
 
     private static final Object BASE_URI = "/";
 
-
     @Autowired
     CompanyService companyService;
-
 
     @Autowired
     CompanyRepository companyRepository;

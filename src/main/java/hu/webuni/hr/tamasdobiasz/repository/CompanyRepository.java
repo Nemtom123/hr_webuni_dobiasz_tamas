@@ -16,13 +16,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 	@Query("SELECT c FROM Company c JOIN c.employees e WHERE e.salary > :minSalary")
 	public List<Company> findByEmployeeWithSalaryHigherThan(int minSalary);
 
+	@Query("SELECT DISTINCT c FROM Company c INNER JOIN c.employees e WHERE e.name = name")
 	Optional<Company> findWorkByName(String workName);
-
-
-	//@Query("SELECT DISTINC c FROM Company c LEFT JOIN FETCH c.employees")
-	@EntityGraph("Company.full")
-	@Query("SELECT c FROM Company c")
-	public List<Company> findAllWhithEmployees();
 
 	@Query("SELECT c FROM Company c WHERE SIZE(c.employees) > :minEmployeeCount")
 	public List<Company> findByEmployeeCountHigherThan(int minEmployeeCount);
@@ -43,9 +38,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 	@Query("SELECT c FROM Company c WHERE SIZE(c.employees) > :employeeNumber")
 	List<Company> findWhereEmployeeNumberIsAboveCompanies(int employeeNumber);
 
-	@Query("SELECT new hrDto(e.position.name, avg(e.salary)) FROM Company c INNER JOIN c.employees e WHERE c.registrationNumber = :id GROUP BY e.position.name ORDER BY avg(e.salary) DESC")
-	List<HrDto> listAverageSalaryiesGroupedByTitlesAtAHrDtos(Long id);
-
 	Optional<Company> findByCompanyName(String name);
 
 
@@ -54,7 +46,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 	List<Company> findAllWithCompanies();
 
 	@EntityGraph("companyWithEmployeesAndEmployeePositions")
-	@Query("SELECT c FROM Company c WHERE c.registrationNumber = :id")
+	@Query("SELECT c FROM Company c WHERE c.companyRegistrationNumber = :id")
 	Optional<Company> findByWithCompany(long id);
 
 	@EntityGraph("companyWithEmployeesAndEmployeePositions")
@@ -65,18 +57,15 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 	@Query("SELECT c FROM Company c WHERE SIZE(c.employees) > :employeeNumber")
 	List<Company> findWhereEmployeeNumberIsAbove(int employeeNumber);
 
-	@Query("SELECT new hrDto(e.position.name, avg(e.salary)) FROM Company c INNER JOIN c.employees e WHERE c.registrationNumber = :id GROUP BY e.position.name ORDER BY avg(e.salary) DESC")
+	@Query("SELECT new hu.webuni.hr.tamasdobiasz.dto.HrDto(e.position.name, avg(e.salary)) FROM Company c INNER JOIN c.employees e WHERE c.companyRegistrationNumber = :id GROUP BY e.position.name ORDER BY avg(e.salary) DESC")
 	List<HrDto> listAverageSalaryiesGroupedByTitlesAtACompany(Long id);
-
-	Optional<Company> findByName(String name);
-
 
 	@EntityGraph("companyWithEmployeesAndEmployeePositions")
 	@Query("SELECT c FROM Company c")
 	List<Company> findAllWithEmployees();
 
 	@EntityGraph("companyWithEmployeesAndEmployeePositions")
-	@Query("SELECT c FROM Company c WHERE c.registrationNumber = :id")
+	@Query("SELECT c FROM Company c WHERE c.companyRegistrationNumber = :id")
 	Optional<Company> findByWithEmployees(long id);
 
 }
