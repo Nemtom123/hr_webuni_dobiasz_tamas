@@ -46,7 +46,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 	@Query("SELECT new hrDto(e.position.name, avg(e.salary)) FROM Company c INNER JOIN c.employees e WHERE c.registrationNumber = :id GROUP BY e.position.name ORDER BY avg(e.salary) DESC")
 	List<HrDto> listAverageSalaryiesGroupedByTitlesAtAHrDtos(Long id);
 
-	Optional<Company> findByNameCompany(String name);
+	Optional<Company> findByCompanyName(String name);
 
 
 	@EntityGraph("companyWithEmployeesAndEmployeePositions")
